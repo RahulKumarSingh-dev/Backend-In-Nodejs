@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev":"nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "api",
@@ -26,7 +26,9 @@
     "nodemailer": "^6.9.7",
     "razorpay": "^2.9.2",
     "stripe": "^14.8.0",
-    "validator": "^13.11.0"
+    "swagger-ui-express": "^5.0.0",
+    "validator": "^13.11.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
