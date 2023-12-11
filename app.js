@@ -17,16 +17,21 @@ app.use(express.urlencoded({extended:true}))
 
 // cookies and file middleware
 app.use(cookieParser())
-app.use(fileUpload())
+app.use(fileUpload({
+  useTempFiles:true,
+  tempFileDir:"/tmp/"
+}))
 
 // morgan middleware
 app.use(morgan('tiny'))
 
 // import all routes 
 const homeRoute = require('./routes/homeRoute');
+const userRoute = require('./routes/userRoute');
 
 // router middleware
 app.use("/api/v1",homeRoute);
+app.use("/api/v1",userRoute);
 
 
 module.exports = app;

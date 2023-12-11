@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const valildator = require('validator');
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -32,11 +32,11 @@ const userSchema = new mongoose.Schema({
   photo: {
     id: {
       type: String,
-      required: true,
+      
     },
     secure_url: {
       type: String,
-      required: true,
+      
     },
   },
   forgotPasswordToken: String,
