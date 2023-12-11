@@ -21,11 +21,11 @@ app.use(fileUpload())
 
 // morgan middleware
 app.use(morgan('tiny'))
+
 // import all routes 
 const homeRoute = require('./routes/homeRoute');
 
 // router middleware
-
 app.use("/api/v1",homeRoute);
 
 
