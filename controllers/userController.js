@@ -34,7 +34,6 @@ exports.signup = BigPromise(async (req, res, next) => {
 
   cookieToken(user, res);
 });
-
 exports.login = BigPromise(async (req, res, next) => {
   const { email, password } = req.body;
   //check for presence of email and password
@@ -104,12 +103,11 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
 
 exports.passwordReset = BigPromise(async (req, res, next) => {
   const token = req.params.token;
-
   const encryptToken = crypto.createHash('sha256').update(token).digest('hex');
 
   const user = await User.findOne({
-    encryptToken,
-    forgotPasswordExpiry: { $gt: Date.now() },
+    forgotPasswordToken:encryptToken,
+    forgotPasswordExpiry:{$gt:Date.now()}
   });
 
   if (!user) {
