@@ -106,8 +106,8 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
   const encryptToken = crypto.createHash('sha256').update(token).digest('hex');
 
   const user = await User.findOne({
-    forgotPasswordToken:encryptToken,
-    forgotPasswordExpiry:{$gt:Date.now()}
+    forgotPasswordToken: encryptToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
   });
 
   if (!user) {
@@ -129,4 +129,64 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
   // send a json response or send token
 
   cookieToken(user, res);
+});
+
+exports.userdashboard = BigPromise(async (req, res, next) => {
+  const user = req.user;
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+exports.changePassword = BigPromise(async (req, res, next) => {
+  const userId = req.user.id;
+  const newPassword = req.body.newPassword;
+  const oldPassword = req.body.oldPassword;
+  const user = await User.findById(userId).select('+password');
+
+  const isOldPasswordCorrect = user.isValidatedPassowrd(oldPassword);
+
+  if (!isOldPasswordCorrect)
+    return next(new Error('Old Password is not correct'));
+
+  user.password = newPassword;
+
+  user.save();
+  cookieToken(user, res);
+});
+
+exports.updateUserDetails = BigPromise(async (req, res, next) => {
+  const newData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+  if (req.files && req.files.photo !== '') {
+    const user = await User.findById(req.user.id);
+
+    if (user.photo) {
+      const imageId = user.photo.id;
+      const resp = await cloudinary.v2.uploader.destroy(imageId);
+
+      let file = req.files.photo;
+      const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+        folder: 'users',
+        width: 150,
+        crop: 'scale',
+      });
+
+      newData.photo = {
+        id: result.public_id,
+        secure_url: result.secure_url,
+      };
+    }
+  }
+  const user = User.findByIdAndUpdate(req.user.id, newData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify:false
+  });
+  res.status(200).json({
+    success: true,
+  });
 });
