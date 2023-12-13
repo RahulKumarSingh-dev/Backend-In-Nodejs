@@ -32,11 +32,9 @@ const userSchema = new mongoose.Schema({
   photo: {
     id: {
       type: String,
-      
     },
     secure_url: {
       type: String,
-      
     },
   },
   forgotPasswordToken: String,

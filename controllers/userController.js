@@ -3,6 +3,8 @@ const BigPromise = require('../middlewares/BIgPromise');
 const cookieToken = require('../utils/cookieToken');
 const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary');
+const mailHelper = require('../utils/mailHelper');
+const crypto = require('crypto');
 
 exports.signup = BigPromise(async (req, res, next) => {
   let result;
@@ -33,36 +35,100 @@ exports.signup = BigPromise(async (req, res, next) => {
   cookieToken(user, res);
 });
 
-exports.login = BigPromise(async (req,res,next)=>{
-  const {email,password} = req.body
-  //check for presence of email and password 
+exports.login = BigPromise(async (req, res, next) => {
+  const { email, password } = req.body;
+  //check for presence of email and password
 
-  if(!email||!password){
-    return next(new Error('Please provide email and password'))
+  if (!email || !password) {
+    return next(new Error('Please provide email and password'));
   }
-  const user = await User.findOne({email}).select("+password")
+  const user = await User.findOne({ email }).select('+password');
 
-  if(!user){
-    return next(new Error('Email or password does not exist or match'))
+  if (!user) {
+    return next(new Error('Email or password does not exist or match'));
   }
 
   const isPasswordCorrect = await user.isValidatedPassowrd(password);
 
-  if(!isPasswordCorrect){
-    return next(new Error('Email or password does not exist or match')) 
+  if (!isPasswordCorrect) {
+    return next(new Error('Email or password does not exist or match'));
   }
 
-  cookieToken(user,res)
-
-})
-exports.logout = BigPromise(async (req,res,next)=>{
-  res.cookie('token',null,{
-    expires:new Date(Date.now()),
-    httpOnly:true
-  })
+  cookieToken(user, res);
+});
+exports.logout = BigPromise(async (req, res, next) => {
+  res.cookie('token', null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
   res.status(200).json({
-    success:true,
-    message:"Logout success",
-  })
+    success: true,
+    message: 'Logout success',
+  });
+});
 
-})
+exports.forgotPassword = BigPromise(async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) return next(new Error('User not found'));
+
+  const forgotToken = user.getForgotPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const myUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/password/reset/${forgotToken}`;
+
+  const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`;
+
+  try {
+    await mailHelper({
+      email: user.email,
+      subject: 'Password Rest email',
+      message,
+    });
+    res.status(200).json({
+      success: true,
+      message: 'Email send successfully',
+    });
+  } catch (error) {
+    user.forgotPasswordExpiry = undefined;
+    user.forgotPasswordToken = undefined;
+    await user.save({ validateBeforeSave: false });
+    console.log(error);
+    return next(new Error(error.message));
+  }
+});
+
+exports.passwordReset = BigPromise(async (req, res, next) => {
+  const token = req.params.token;
+
+  const encryptToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const user = await User.findOne({
+    encryptToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new Error('Token is invalid or expired'));
+  }
+
+  const { password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    return next(new Error('Password and confirm password do not match'));
+  }
+
+  user.password = password;
+
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+  await user.save();
+
+  // send a json response or send token
+
+  cookieToken(user, res);
+});
