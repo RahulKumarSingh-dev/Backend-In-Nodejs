@@ -228,13 +228,13 @@ exports.adminUpdateOneUserDetails = BigPromise(async (req, res, next) => {
 });
 
 exports.adminDeleteOneUser = BigPromise(async (req, res, next) => {
-  const user = User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
   if (!user) return next(new Error('No user found'));
 
   const imageId = user.photo.id;
   await cloudinary.v2.uploader.destroy(imageId);
 
-  await user.remove();
+  await User.deleteOne({_id:req.params.id});
 
   res.status(200).json({
     success: true,
