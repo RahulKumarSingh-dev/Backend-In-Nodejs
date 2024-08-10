@@ -2,40 +2,40 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getAllProduct,
+  getAllProducts,
   addProduct,
-  adminGetAllProducts,
   getOneProduct,
-  adminUpdateOneProduct,
-  adminDeleteOneProduct,
-  addReview,
-  deleteReview,
-  getOnlyReviewsForOneProduct,
+  updateOneProduct,
+  deleteOneProduct,
+  getQueryProducts
 } = require('../controllers/productController');
 
-const { isLoggedInUser, customRole } = require('../middlewares/userMiddleware');
-
-// user routes
-router.route('/products').get(getAllProduct);
-router.route('/product/:id').get(getOneProduct);
-router.route('/product/:id').get(getOneProduct);
-router
-  .route('/review')
-  .put(isLoggedInUser, addReview)
-  .delete(isLoggedInUser, deleteReview);
-router.route('/reviews').get(isLoggedInUser, getOnlyReviewsForOneProduct);
-
-// admin routes
-router
-  .route('/admin/product/add')
-  .post(isLoggedInUser, customRole('admin'), addProduct);
-router
-  .route('/admin/products')
-  .get(isLoggedInUser, customRole('admin'), adminGetAllProducts);
+// Product Management: routes
 
 router
-  .route('/admin/product/:id')
-  .put(isLoggedInUser, customRole('admin'), adminUpdateOneProduct)
-  .delete(isLoggedInUser, customRole('admin'), adminDeleteOneProduct);
+  .route('/product/add')
+  .post(addProduct);
+
+router
+  .route('/product/update/:id')
+  .put(updateOneProduct);
+
+router
+  .route('/product/delete/:id')
+  .delete(deleteOneProduct);
+
+// Inventory Listing: routes
+
+router.route('/product/allProducts').get(getAllProducts);
+
+router.route('/product/singleProduct/:id').get(getOneProduct);
+
+// Searching Product: routes
+
+router.route('/product/search').get(getQueryProducts);
+
+
+
+
 
 module.exports = router;
