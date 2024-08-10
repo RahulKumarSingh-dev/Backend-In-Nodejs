@@ -1,0 +1,8 @@
+# Project Setup
+- Step 1 : Download the Brnach `himanshu_project`
+- Step 2 : Create a mongo db cluster in mongo atlas.
+- Step 3 : Paste the connection string in .env file
+- Step 4 : Run command ```npm i``` to install all the dependencies
+- Step 5 : Run command `npm run dev` to run the project in dev mode or run command `npm run test` to run the project in test mode.
+
+Test the project using postman with given postman collection.
