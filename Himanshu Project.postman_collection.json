@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "5a319d07-53ca-4eb1-a4d7-0b4c9d44d704",
+		"name": "Himanshu Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28200279"
+	},
+	"item": [
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"USB-C Cable\",\n  \"price\": 599,\n  \"sales\": 500,\n  \"quantity\": 100,\n  \"supplier\": \"Cable Connect Ltd.\",\n  \"description\": \"Durable and fast-charging USB-C cable, 1 meter long.\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/v1/product/add",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Product",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/api/v1/product/singleProduct/66b7b3cf7fa3edf3bf14782e",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"singleProduct",
+						"66b7b3cf7fa3edf3bf14782e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"success\": true,\n    \"product\": {\n        \"_id\": \"66b7b3cf7fa3edf3bf14782e\",\n        \"name\": \"Wireless Mouse\",\n        \"price\": 3000,\n        \"sales\": 150,\n        \"quantity\": 100,\n        \"supplier\": \"Tech Supplies Co.\",\n        \"description\": \"A high-precision wireless mouse with ergonomic design.\",\n        \"createdAt\": \"2024-08-10T18:39:11.422Z\",\n        \"__v\": 0\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/v1/product/update/66b7b3cf7fa3edf3bf14782e",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"update",
+						"66b7b3cf7fa3edf3bf14782e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"success\": true,\n    \"product\": {\n        \"_id\": \"66b7b3cf7fa3edf3bf14782e\",\n        \"name\": \"Wireless Mouse\",\n        \"price\": 3000,\n        \"sales\": 150,\n        \"quantity\": 100,\n        \"supplier\": \"Tech Supplies Co.\",\n        \"description\": \"A high-precision wireless mouse with ergonomic design.\",\n        \"createdAt\": \"2024-08-10T18:39:11.422Z\",\n        \"__v\": 0\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/v1/product/delete/66b7b3cf7fa3edf3bf14782e",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"delete",
+						"66b7b3cf7fa3edf3bf14782e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Query Products",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"success\": true,\n    \"product\": {\n        \"_id\": \"66b7b3cf7fa3edf3bf14782e\",\n        \"name\": \"Wireless Mouse\",\n        \"price\": 3000,\n        \"sales\": 150,\n        \"quantity\": 100,\n        \"supplier\": \"Tech Supplies Co.\",\n        \"description\": \"A high-precision wireless mouse with ergonomic design.\",\n        \"createdAt\": \"2024-08-10T18:39:11.422Z\",\n        \"__v\": 0\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/v1/product/delete/66b7b3cf7fa3edf3bf14782e",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"delete",
+						"66b7b3cf7fa3edf3bf14782e"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
